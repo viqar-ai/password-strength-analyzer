@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Analyzer</title>
+    <style>
+
+        <script>
+const input = document.querySelector("input[name='password']");
+const resultDiv = document.createElement("div");
+document.querySelector(".container").appendChild(resultDiv);
+
+input.addEventListener("input", async () => {
+    const password = input.value;
+
+    if (password.length === 0) {
+        resultDiv.innerHTML = "";
+        return;
+    }
+
+    const res = await fetch('/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+    });
+
+    const data = await res.json();
+
+    let text = "";
+    if (data.score === 0) text = "Very Weak";
+    else if (data.score === 1) text = "Weak";
+    else if (data.score === 2) text = "Medium";
+    else if (data.score === 3) text = "Strong";
+    else text = "Very Strong";
+
+    resultDiv.innerHTML = `<h3>${text}</h3>`;
+});
+</script>
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .bar {
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            transition: 0.5s;
+        }
+
+        .weak { background: red; width: 25%; }
+        .medium { background: orange; width: 50%; }
+        .strong { background: green; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Password Checker</h1>
+
+    <form method="POST">
+        <input type="text" name="password" placeholder="Enter password" required><br>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if strength is not none %}
+        <div class="bar">
+            <div class="fill 
+            {% if strength <= 1 %}weak
+            {% elif strength == 2 %}medium
+            {% else %}strong
+            {% endif %}
+            "></div>
+        </div>
+<h3>{{ message }}</h3>
+
+{% if suggestions %}
+    <h4>Suggestions:</h4>
+    <ul>
+        {% for s in suggestions %}
+            <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if alternatives %}
+    <h4>Try these strong alternatives:</h4>
+    <ul>
+        {% for alt in alternatives %}
+            <li>{{ alt }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
