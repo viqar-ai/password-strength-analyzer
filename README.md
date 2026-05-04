@@ -6,7 +6,7 @@ A modern web application that evaluates password strength and provides actionabl
 
 ## 🌐 Live Demo
 
-👉 https://your-render-link.onrender.com
+👉 https://password-strength-analyzer-7dn6.onrender.com/
 
 ---
 
